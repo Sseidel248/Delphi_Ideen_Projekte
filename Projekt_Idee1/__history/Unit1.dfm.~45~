@@ -1,0 +1,104 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 223
+  ClientWidth = 587
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = MainMenu1
+  OldCreateOrder = False
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object GridBeForeSave: TStringGrid
+    Left = 0
+    Top = 0
+    Width = 209
+    Height = 89
+    ColCount = 3
+    FixedCols = 0
+    RowCount = 3
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColMoving, goEditing, goFixedColClick]
+    TabOrder = 0
+  end
+  object GridAfterSave: TStringGrid
+    Left = 360
+    Top = 0
+    Width = 209
+    Height = 89
+    ColCount = 3
+    FixedCols = 0
+    RowCount = 3
+    TabOrder = 1
+  end
+  object GridBeforeLoad: TStringGrid
+    Left = 0
+    Top = 120
+    Width = 209
+    Height = 89
+    ColCount = 3
+    FixedCols = 0
+    RowCount = 3
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColMoving, goEditing, goFixedColClick]
+    TabOrder = 2
+  end
+  object GridAfterLoad: TStringGrid
+    Left = 360
+    Top = 120
+    Width = 209
+    Height = 89
+    ColCount = 3
+    FixedCols = 0
+    RowCount = 3
+    TabOrder = 3
+  end
+  object BLoad: TButton
+    Left = 225
+    Top = 160
+    Width = 121
+    Height = 25
+    Caption = 'Lade Konv.'
+    TabOrder = 4
+    OnClick = BLoadClick
+  end
+  object BSave: TButton
+    Left = 225
+    Top = 24
+    Width = 121
+    Height = 25
+    Caption = 'Speicher Konv.'
+    TabOrder = 5
+    OnClick = BSaveClick
+  end
+  object BReset: TButton
+    Left = 225
+    Top = 96
+    Width = 121
+    Height = 25
+    Caption = 'Reset'
+    TabOrder = 6
+    OnClick = BResetClick
+  end
+  object MainMenu1: TMainMenu
+    Left = 272
+    Top = 56
+    object Sprache1: TMenuItem
+      Caption = 'Sprache Grids'
+      object Deutsch1: TMenuItem
+        Caption = 'Deutsch'
+        Checked = True
+        OnClick = Deutsch1Click
+      end
+      object Englisch1: TMenuItem
+        Caption = 'Englisch'
+        OnClick = Englisch1Click
+      end
+    end
+  end
+end

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.399,=D:\Delphi embarcadero\Test_Projekte\Farbverlauf_panel_demo\Unit2.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.085,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.dfm=D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.085,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.pas=D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.831,=C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.867,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Project1.dproj=D:\Delphi embarcadero\Farbverlauf_panel_demo\Project1.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
