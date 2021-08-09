@@ -2,9 +2,10 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>1899.12.30 00:00:00.000.399,=D:\Delphi embarcadero\Test_Projekte\Farbverlauf_panel_demo\Unit2.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.085,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.dfm=D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.085,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.pas=D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.085,D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.dfm=C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.867,D:\Delphi embarcadero\Farbverlauf_panel_demo\Project1.dproj=C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Project1.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.831,=C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.867,C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Project1.dproj=D:\Delphi embarcadero\Farbverlauf_panel_demo\Project1.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.085,D:\Delphi embarcadero\Farbverlauf_panel_demo\Unit1.pas=C:\Users\BattiPerdator\Documents\Embarcadero\Studio\Projekte\Unit1.pas</Transaction>
+    <Transaction>2021.08.09 11:07:26.393,=D:\Delphi embarcadero\Test_Projekte\Projekt_Idee1\Unit3.pas</Transaction>
   </Transactions>
 </BorlandProject>

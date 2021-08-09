@@ -27,6 +27,16 @@ type
     LResult2: TLabel;
     GB_SimFile: TGroupBox;
     Reset1: TMenuItem;
+    GB_NewLoad: TGroupBox;
+    GB_OldLoad: TGroupBox;
+    GB_Inhalt: TGroupBox;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    OldGridAfterLoad: TStringGrid;
+    OldGridBeForeSave: TStringGrid;
+    B_OldSave: TButton;
+    B_OldLoad: TButton;
+    Label1: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Reset1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -36,6 +46,8 @@ type
     procedure BLoadClick(Sender: TObject);
     procedure CB_SpaltenChange(Sender: TObject);
     procedure CB_SpaltenIDChange(Sender: TObject);
+    procedure B_OldSaveClick(Sender: TObject);
+    procedure B_OldLoadClick(Sender: TObject);
   private
     Sprache : String;
     procedure ClearGrid( var ASG : TStringGrid );
@@ -43,7 +55,9 @@ type
     procedure SetIDs( var ASG : TStringGrid );
     procedure SetHeaderInCB( var CB : TComboBox );
     procedure CopyNormalCells( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
-    procedure ConvForSave( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
+    procedure CopyAllCells( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
+    procedure ConvForSave( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid; NeedOldWay : Boolean = false );
+    function ExistIDHeader( ASG_Src : TStringGrid ) : Boolean;
     procedure ConvForLoad( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
     { Private-Deklarationen }
   public
@@ -64,7 +78,9 @@ implementation
 
 {$R *.dfm}
 
-uses Unit2;
+uses
+Unit2,
+Unit3;
 
 const
 h1_d = 'Brot';
@@ -81,6 +97,17 @@ procedure TForm1.BSaveClick(Sender: TObject);
 begin
   CopyNormalCells( GridBeForeSave, GridAfterSave );
   ConvForSave( GridBeForeSave, GridAfterSave );
+end;
+
+procedure TForm1.B_OldLoadClick(Sender: TObject);
+begin
+  ConvForLoad( GridAfterSave, OldGridAfterLoad );
+end;
+
+procedure TForm1.B_OldSaveClick(Sender: TObject);
+begin
+  CopyNormalCells( OldGridBeForeSave, GridAfterSave );
+  ConvForSave( OldGridBeForeSave, GridAfterSave, true );
 end;
 
 procedure TForm1.CB_SpaltenChange(Sender: TObject);
@@ -108,7 +135,7 @@ begin
     end;
 
     if DictColWithHeader.TryGetValue( key, sCol ) then
-      LResult.Caption := Format( 'Ihre Col zur Spalte: %d', [sCol] )
+      LResult.Caption := Format( 'Spalte: %d', [sCol+1] )
     else
       LResult.Caption := 'Spalte Nicht gefunden.';
   end;
@@ -126,7 +153,7 @@ begin
       3: key := id3;
     end;
     if DictColWithID.TryGetValue( key, sCol ) then
-      LResult2.Caption := Format( 'Ihre Col zur ID: %d', [sCol] )
+      LResult2.Caption := Format( 'Spalte: %d', [sCol+1] )
     else
       LResult2.Caption := 'ID Nicht gefunden.';
   end;
@@ -150,6 +177,7 @@ begin
   Deutsch1.Checked := true;
   Englisch1.Checked := false;
   SetHeader( GridBeForeSave );
+  SetHeader( OldGridBeForeSave );
 end;
 
 procedure TForm1.Englisch1Click(Sender: TObject);
@@ -158,6 +186,7 @@ begin
   Deutsch1.Checked := false;
   Englisch1.Checked := true;
   SetHeader( GridBeForeSave );
+  SetHeader( OldGridBeForeSave );
 end;
 
 procedure TForm1.SetHeader( var ASG : TStringGrid );
@@ -214,27 +243,71 @@ begin
   end;
 end;
 
-procedure TForm1.ConvForSave( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
+procedure TForm1.CopyAllCells( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
+var
+  col: Integer;
+  head : String;
+begin
+  DictColWithHeader.Clear;
+  for col := 0 to ASG_Src.ColCount-1 do
+  begin
+    head := ASG_Src.Cells[col,0];
+    DictColWithHeader.TryAdd( head, col );
+    ASG_Dest.Cells[col,0] := head;
+  end;
+  CopyNormalCells( ASG_Src, ASG_Dest );
+end;
+
+procedure TForm1.ConvForSave( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid; NeedOldWay : Boolean = false );
 var
   col: Integer;
   head : String;
   id : Integer;
 begin
   DictColWithID.Clear;
+  if NeedOldWay then
+  begin
+    for col := 0 to ASG_Src.ColCount-1 do
+    begin
+      head := ASG_Src.Cells[col,0];
+      ASG_Dest.Cells[col,0] := head;
+    end;
+  end
+  else
+  begin
+    for col := 0 to ASG_Src.ColCount-1 do
+    begin
+      head := ASG_Src.Cells[col,0];
+      if DictIDWithHeader.TryGetValue( head, id ) then
+      begin
+        ASG_Dest.Cells[col,0] := IntToStr( id );
+        DictColWithID.TryAdd( id, col );
+      end;
+    end;
+  end;
+end;
+
+function TForm1.ExistIDHeader( ASG_Src : TStringGrid ) : Boolean;
+var
+col, id : Integer;
+sHead : String;
+begin
+  Result := true;
   for col := 0 to ASG_Src.ColCount-1 do
   begin
-    head := ASG_Src.Cells[col,0];
-    if DictIDWithHeader.TryGetValue( head, id ) then
+    sHead := ASG_Src.Cells[col,0];
+    id := StrToIntDef( sHead, -1 );
+    if id = -1 then
     begin
-      ASG_Dest.Cells[col,0] := IntToStr( id );
-      DictColWithID.TryAdd( id, col );
+      Result := false;
+      Break;
     end;
   end;
 end;
 
 procedure TForm1.ConvForLoad( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid );
 
-  procedure GetNSetHeaders( Dict : TDictionary<Integer,String> );
+  procedure ConvSavedHeader( Dict : TDictionary<Integer,String> );
   var
   col: Integer;
   head : String;
@@ -252,11 +325,32 @@ procedure TForm1.ConvForLoad( ASG_Src : TStringGrid; var ASG_Dest : TStringGrid 
     end;
   end;
 
+  procedure SaveAllHeader( );
+  var
+    col: Integer;
+    head : String;
+  begin
+    DictColWithHeader.Clear;
+    for col := 0 to ASG_Src.ColCount-1 do
+    begin
+      head := ASG_Src.Cells[col,0];
+      DictColWithHeader.TryAdd( head, col );
+    end;
+  end;
+
 begin
-  if Sprache.Equals('D') then
-    GetNSetHeaders( DictHeaderWithID_D )
+  if ExistIDHeader( GridAfterSave ) then
+  begin
+    if Sprache.Equals('D') then
+      ConvSavedHeader( DictHeaderWithID_D )
+    else
+      ConvSavedHeader( DictHeaderWithID_E );
+  end
   else
-    GetNSetHeaders( DictHeaderWithID_E );
+  begin
+    CopyAllCells( ASG_Src, ASG_Dest );
+    SaveAllHeader();
+  end;
 
   SetHeaderInCB( CB_Spalten );
 end;
@@ -272,8 +366,11 @@ begin
   ClearGrid( GridBeForeSave );
   ClearGrid( GridAfterSave );
   ClearGrid( GridAfterLoad );
+  ClearGrid( OldGridBeForeSave );
+  ClearGrid( OldGridAfterLoad );
 
   SetHeader( GridBeForeSave );
+  SetHeader( OldGridBeForeSave );
 
   LResult.Caption := 'Spalte:';
   LResult2.Caption := 'Spalte:';
@@ -292,6 +389,8 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+Test : TMyClass;
 begin
   DictHeaderWithID_D := TDictionary<Integer,String>.Create;
   DictHeaderWithID_E := TDictionary<Integer,String>.Create;
@@ -318,6 +417,7 @@ begin
   Self.Sprache := 'D';
 
   SetHeader( GridBeForeSave );
+  SetHeader( OldGridBeForeSave );
 
   CB_SpaltenID.Clear;
   CB_SpaltenID.Items.Add( 'Bitte ID wählen' );
@@ -327,6 +427,9 @@ begin
   CB_SpaltenID.ItemIndex := 0;
 
   SetHeaderInCB( CB_Spalten );
+
+  //Test
+  Test := TMyClass.Create('hallo');
 end;
 
 
